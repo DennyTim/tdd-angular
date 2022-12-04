@@ -83,10 +83,10 @@ describe('SignUpComponent', () => {
       expect(input.type).toBe('password');
     });
 
-    it('has Sign Up header', () => {
+    it('has Sign Up button', () => {
       const signUp = fixture.nativeElement as HTMLElement;
       const button = signUp.querySelector('button');
-      expect(button?.textContent).toBe('Sign Up');
+      expect(button?.textContent).toContain('Sign Up');
     });
 
     it('disables the button initially', () => {
@@ -97,33 +97,19 @@ describe('SignUpComponent', () => {
   });
 
   describe('Interactions', () => {
-    it('enables the button when the password and password repeat fields have same value', () => {
-      const signUp = fixture.nativeElement as HTMLElement;
-      const passwordInput = signUp.querySelector('input[id="password"]') as HTMLInputElement;
-      const passwordRepeatInput = signUp.querySelector('input[id="passwordRepeat"]') as HTMLInputElement;
+    let button: any;
+    let signUp: HTMLElement;
+    let httpTestingController: HttpTestingController;
 
-      passwordInput.value = 'P4ssword';
-      passwordInput.dispatchEvent(new Event('input'));
-      passwordRepeatInput.value = 'P4ssword';
-      passwordRepeatInput.dispatchEvent(new Event('input'));
-
-      // Trigger Cdr after setting inputs
-      fixture.detectChanges();
-
-      const button = signUp.querySelector('button');
-      expect(button?.disabled).toBeFalsy();
-    })
-
-    it('sends username, email and password to BE after clicking the button', () => {
-      const httpTestingController = TestBed.inject(HttpTestingController);
-
-      const signUp = fixture.nativeElement as HTMLElement;
+    const setupForm = () => {
+      httpTestingController = TestBed.inject(HttpTestingController);
+      signUp = fixture.nativeElement as HTMLElement;
+      button = signUp.querySelector('button');
 
       const usernameInput = signUp.querySelector('input[id="username"]') as HTMLInputElement;
       const emailInput = signUp.querySelector('input[id="email"]') as HTMLInputElement;
       const passwordInput = signUp.querySelector('input[id="password"]') as HTMLInputElement;
       const passwordRepeatInput = signUp.querySelector('input[id="passwordRepeat"]') as HTMLInputElement;
-      const button = signUp.querySelector('button');
 
       usernameInput.value = "user1";
       emailInput.value = "user1@mail.com";
@@ -136,7 +122,15 @@ describe('SignUpComponent', () => {
       passwordRepeatInput.dispatchEvent(new Event('input'));
 
       fixture.detectChanges();
+    }
 
+    it('enables the button when the password and password repeat fields have same value', () => {
+      setupForm();
+      expect(button?.disabled).toBeFalsy();
+    });
+
+    it('sends username, email and password to BE after clicking the button', () => {
+      setupForm();
       button?.click();
 
       const req = httpTestingController.expectOne("/api/1.0/users");
@@ -147,7 +141,25 @@ describe('SignUpComponent', () => {
         password: 'P4ssword',
         email: "user1@mail.com",
       });
-    })
+    });
+
+    it('disables button when there is an ongoing api call', () => {
+      setupForm();
+      button?.click();
+      fixture.detectChanges();
+      button?.click();
+
+      httpTestingController.expectOne("/api/1.0/users");
+      expect(button.disabled).toBeTruthy();
+    });
+
+    it('displays spinner after clicking the submit', () => {
+      setupForm();
+      expect(signUp.querySelector('span[role="status"]')).toBeFalsy();
+      button.click();
+      fixture.detectChanges();
+      expect(signUp.querySelector('span[role="status"]')).toBeTruthy();
+    });
   });
 });
 

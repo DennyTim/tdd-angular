@@ -11,6 +11,7 @@ export class SignUpComponent {
   public userName = "";
   public email = "";
   public disabled = true;
+  public apiProgress = false;
   private password: string = "";
   private passwordRepeat: string = "";
 
@@ -36,15 +37,7 @@ export class SignUpComponent {
   }
 
   onClickSignUp() {
-    // fetch("/api/1.0/users", {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     username: this.userName,
-    //     password: this.password,
-    //     email: this.email
-    //   }),
-    //   headers: { "Content-Type": "application/json" }
-    // })
+    this.apiProgress = true;
     this.httpClient.post("/api/1.0/users", {
       username: this.userName,
       password: this.password,

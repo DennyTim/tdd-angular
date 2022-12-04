@@ -3,12 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxy.conf.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --browsers ChromeHeadless",
     "backend": "nodemon backend/index.js",
-    "jest": "jest --watch"
+    "jest": "jest --watchAll"
   },
   "private": true,
   "dependencies": {
