@@ -8,13 +8,13 @@ import { HttpClient } from "@angular/common/http";
 })
 export class SignUpComponent {
 
-  public userName = "";
-  public email = "";
-  public disabled = true;
-  public apiProgress = false;
-  public signUpSuccess = false;
-  private password: string = "";
-  private passwordRepeat: string = "";
+  userName = "";
+  email = "";
+  disabled = true;
+  apiProgress = false;
+  signUpSuccess = false;
+  password: string = "";
+  passwordRepeat: string = "";
 
   constructor(private httpClient: HttpClient) {
   }
