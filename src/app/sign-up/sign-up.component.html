@@ -62,21 +62,14 @@
         />
       </div>
       <div class="text-center">
-        <button
-          class="btn btn-primary"
-          [disabled]="disabled || apiProgress"
-        >
-          <span
-            *ngIf="apiProgress"
-            class="spinner-border spinner-border-sm"
-            role="status"
-          ></span>
-          Sign Up
-        </button>
+        <app-button
+          [apiProgress]="apiProgress"
+          [disabled]="disabled"
+        >Sign Up</app-button>
       </div>
     </form>
   </div>
 </div>
 <ng-template #successMessage>
-  <div class="alert alert-success">Please check your e-mail to activate your account</div>
+  <app-alert text="Please check your e-mail to activate your account"></app-alert>
 </ng-template>

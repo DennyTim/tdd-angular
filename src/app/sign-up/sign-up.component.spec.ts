@@ -8,6 +8,8 @@ import {
   HttpClientTestingModule,
   HttpTestingController
 } from "@angular/common/http/testing";
+import { AlertComponent } from "../shared/alert/alert.component";
+import { ButtonComponent } from "../shared/button/button.component";
 
 
 describe('SignUpComponent', () => {
@@ -17,7 +19,11 @@ describe('SignUpComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
-      declarations: [ SignUpComponent ]
+      declarations: [
+        SignUpComponent,
+        AlertComponent,
+        ButtonComponent
+      ]
     })
       .compileComponents();
   });
