@@ -12,6 +12,7 @@ export class SignUpComponent {
   public email = "";
   public disabled = true;
   public apiProgress = false;
+  public signUpSuccess = false;
   private password: string = "";
   private passwordRepeat: string = "";
 
@@ -42,6 +43,8 @@ export class SignUpComponent {
       username: this.userName,
       password: this.password,
       email: this.email
-    }).subscribe(() => {})
+    }).subscribe(() => {
+      this.signUpSuccess = true;
+    })
   }
 }
