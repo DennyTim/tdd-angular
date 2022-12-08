@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import { UserService } from "../core/user.service";
 
 @Component({
   selector: 'app-sign-up',
@@ -16,7 +17,7 @@ export class SignUpComponent {
   password: string = "";
   passwordRepeat: string = "";
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private userService: UserService) {
   }
 
   onChangeUsername(event: Event) {
@@ -39,12 +40,12 @@ export class SignUpComponent {
 
   onClickSignUp() {
     this.apiProgress = true;
-    this.httpClient.post("/api/1.0/users", {
+    this.userService.signUp({
       username: this.userName,
       password: this.password,
       email: this.email
     }).subscribe(() => {
       this.signUpSuccess = true;
-    })
+    });
   }
 }

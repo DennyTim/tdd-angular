@@ -10,6 +10,7 @@ import {
 } from "@angular/common/http/testing";
 import { AlertComponent } from "../shared/alert/alert.component";
 import { ButtonComponent } from "../shared/button/button.component";
+import { SharedModule } from "../shared/shared.module";
 
 
 describe('SignUpComponent', () => {
@@ -18,12 +19,11 @@ describe('SignUpComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      declarations: [
-        SignUpComponent,
-        AlertComponent,
-        ButtonComponent
-      ]
+      imports: [
+        HttpClientTestingModule,
+        SharedModule
+      ],
+      declarations: [SignUpComponent]
     })
       .compileComponents();
   });
