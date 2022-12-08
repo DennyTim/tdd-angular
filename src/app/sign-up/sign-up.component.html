@@ -11,7 +11,8 @@
     </div>
     <form
       class="card-body"
-      (submit)="onClickSignUp(); $event.preventDefault()"
+      [formGroup]="form"
+      (ngSubmit)="onClickSignUp()"
     >
       <div class="mb-3">
         <label
@@ -19,11 +20,10 @@
           for="username"
         >Username</label>
         <input
+          formControlName="username"
           class="form-control"
           id="username"
           placeholder="Username"
-          name="username"
-          [(ngModel)]="userName"
         />
       </div>
       <div class="mb-3">
@@ -32,11 +32,10 @@
           for="email"
         >E-mail</label>
         <input
+          formControlName="email"
           class="form-control"
           id="email"
           placeholder="E-mail"
-          name="email"
-          [(ngModel)]="email"
         />
       </div>
       <div class="mb-3">
@@ -45,11 +44,10 @@
           for="password"
         >Password</label>
         <input
+          formControlName="password"
           class="form-control"
           id="password"
           type="password"
-          name="password"
-          [(ngModel)]="password"
         />
       </div>
       <div class="mb-3">
@@ -58,11 +56,10 @@
           for="passwordRepeat"
         >Password Repeat</label>
         <input
+          formControlName="passwordRepeat"
           class="form-control"
           id="passwordRepeat"
           type="password"
-          name="passwordRepeat"
-          [(ngModel)]="passwordRepeat"
         />
       </div>
       <div class="text-center">

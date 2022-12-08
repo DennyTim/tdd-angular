@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { UserService } from "../core/user.service";
+import {
+  FormControl,
+  FormGroup
+} from "@angular/forms";
 
 @Component({
   selector: 'app-sign-up',
@@ -8,29 +12,32 @@ import { UserService } from "../core/user.service";
 })
 export class SignUpComponent {
 
-  userName = "";
-  email = "";
-  disabled = true;
+  form = new FormGroup({
+    username: new FormControl<string>(""),
+    email: new FormControl<string>(""),
+    password: new FormControl<string>(""),
+    passwordRepeat:  new FormControl<string>(""),
+  });
+
   apiProgress = false;
   signUpSuccess = false;
-  password: string = "";
-  passwordRepeat: string = "";
 
   constructor(private userService: UserService) {
   }
 
   onClickSignUp() {
+    const body = this.form.value;
+    delete body.passwordRepeat;
+
     this.apiProgress = true;
-    this.userService.signUp({
-      username: this.userName,
-      password: this.password,
-      email: this.email
-    }).subscribe(() => {
+    this.userService.signUp(body as any).subscribe(() => {
       this.signUpSuccess = true;
     });
   }
 
   isDisabled() {
-    return this.password ? (this.password !== this.passwordRepeat) : true;
+    return this.form.get('password')?.value
+      ? (this.form.get('password')?.value !== this.form.get('passwordRepeat')?.value)
+      : true;
   }
 }

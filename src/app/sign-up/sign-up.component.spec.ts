@@ -9,7 +9,10 @@ import {
   HttpTestingController
 } from "@angular/common/http/testing";
 import { SharedModule } from "../shared/shared.module";
-import { FormsModule } from "@angular/forms";
+import {
+  FormsModule,
+  ReactiveFormsModule
+} from "@angular/forms";
 
 
 describe('SignUpComponent', () => {
@@ -21,7 +24,7 @@ describe('SignUpComponent', () => {
       imports: [
         HttpClientTestingModule,
         SharedModule,
-        FormsModule
+        ReactiveFormsModule
       ],
       declarations: [ SignUpComponent ]
     })
