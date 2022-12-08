@@ -22,7 +22,8 @@
           class="form-control"
           id="username"
           placeholder="Username"
-          (input)="onChangeUsername($event)"
+          name="username"
+          [(ngModel)]="userName"
         />
       </div>
       <div class="mb-3">
@@ -34,7 +35,8 @@
           class="form-control"
           id="email"
           placeholder="E-mail"
-          (input)="onChangeEmail($event)"
+          name="email"
+          [(ngModel)]="email"
         />
       </div>
       <div class="mb-3">
@@ -46,7 +48,8 @@
           class="form-control"
           id="password"
           type="password"
-          (input)="onChangePassword($event)"
+          name="password"
+          [(ngModel)]="password"
         />
       </div>
       <div class="mb-3">
@@ -58,13 +61,14 @@
           class="form-control"
           id="passwordRepeat"
           type="password"
-          (input)="onChangePasswordRepeat($event)"
+          name="passwordRepeat"
+          [(ngModel)]="passwordRepeat"
         />
       </div>
       <div class="text-center">
         <app-button
           [apiProgress]="apiProgress"
-          [disabled]="disabled"
+          [disabled]="isDisabled()"
         >Sign Up</app-button>
       </div>
     </form>

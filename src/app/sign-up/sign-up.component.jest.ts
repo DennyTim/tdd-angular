@@ -8,9 +8,8 @@ import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
 import { setupServer } from "msw/node"
 import { HttpClientModule } from "@angular/common/http";
-import { AlertComponent } from "../shared/alert/alert.component";
-import { ButtonComponent } from "../shared/button/button.component";
 import { SharedModule } from "../shared/shared.module";
+import { FormsModule } from "@angular/forms";
 
 let requestBody: any;
 let counter = 0;
@@ -30,7 +29,8 @@ const setup = async () => {
   await render(SignUpComponent, {
     imports: [
       HttpClientModule,
-      SharedModule
+      SharedModule,
+      FormsModule
     ]
   })
 }
