@@ -166,5 +166,21 @@ describe("SignUpComponent", () => {
       expect(form).not.toBeInTheDocument();
     })
   });
+
+  describe('Validation', () => {
+
+    it.each`
+      label            |    inputValue                |    message
+      ${'Username'}    |    ${'{space}{backspace}'}   |    ${'Username is required'}
+      ${'Username'}    |    ${'123'}                  |    ${'Username must be at least 4 characters long'}
+    `("displays $message when $label has the value '$inputValue'", async ({ label, inputValue, message }) => {
+      await setup();
+      expect(screen.queryByText(message)).not.toBeInTheDocument();
+      const usernameInput = screen.getByLabelText(label);
+      await userEvent.type(usernameInput, inputValue);
+      await userEvent.tab()
+      expect(screen.queryByText(message)).toBeInTheDocument();
+    });
+  })
 })
 

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { UserService } from "../core/user.service";
 import {
   FormControl,
-  FormGroup
+  FormGroup,
+  Validators
 } from "@angular/forms";
 
 @Component({
@@ -13,16 +14,31 @@ import {
 export class SignUpComponent {
 
   form = new FormGroup({
-    username: new FormControl<string>(""),
+    username: new FormControl<string>("", [
+      Validators.required,
+      Validators.minLength(4)
+    ]),
     email: new FormControl<string>(""),
     password: new FormControl<string>(""),
-    passwordRepeat:  new FormControl<string>(""),
+    passwordRepeat: new FormControl<string>(""),
   });
 
   apiProgress = false;
   signUpSuccess = false;
 
   constructor(private userService: UserService) {
+  }
+
+  get usernameError() {
+    const field = this.form.get('username');
+    if ((field?.errors && (field?.touched || field?.dirty))) {
+      if (field.errors['required']) {
+        return "Username is required";
+      } else {
+        return "Username must be at least 4 characters long"
+      }
+    }
+    return;
   }
 
   onClickSignUp() {

@@ -20,11 +20,17 @@
           for="username"
         >Username</label>
         <input
-          formControlName="username"
           class="form-control"
+          [class.is-invalid]="usernameError"
+          formControlName="username"
           id="username"
           placeholder="Username"
         />
+        <div
+          *ngIf="usernameError"
+          class="invalid-feedback"
+          data-testid="username-validation"
+        >{{ usernameError }}</div>
       </div>
       <div class="mb-3">
         <label
