@@ -18,8 +18,8 @@ export class SignUpComponent {
       Validators.required,
       Validators.minLength(4)
     ]),
-    email: new FormControl<string>(""),
-    password: new FormControl<string>(""),
+    email: new FormControl<string>("", [Validators.required]),
+    password: new FormControl<string>("", [Validators.required]),
     passwordRepeat: new FormControl<string>(""),
   });
 
@@ -36,6 +36,26 @@ export class SignUpComponent {
         return "Username is required";
       } else {
         return "Username must be at least 4 characters long"
+      }
+    }
+    return;
+  }
+
+  get emailError() {
+    const field = this.form.get('email');
+    if ((field?.errors && (field?.touched || field?.dirty))) {
+      if (field.errors['required']) {
+        return "E-mail is required";
+      }
+    }
+    return;
+  }
+
+  get passwordError() {
+    const field = this.form.get('password');
+    if ((field?.errors && (field?.touched || field?.dirty))) {
+      if (field.errors['required']) {
+        return "Password is required";
       }
     }
     return;

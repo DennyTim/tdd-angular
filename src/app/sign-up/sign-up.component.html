@@ -38,11 +38,17 @@
           for="email"
         >E-mail</label>
         <input
+          [class.is-invalid]="emailError"
           formControlName="email"
           class="form-control"
           id="email"
           placeholder="E-mail"
         />
+        <div
+          *ngIf="emailError"
+          class="invalid-feedback"
+          data-testid="email-validation"
+        >{{ emailError }}</div>
       </div>
       <div class="mb-3">
         <label
@@ -50,11 +56,17 @@
           for="password"
         >Password</label>
         <input
+          [class.is-invalid]="passwordError"
           formControlName="password"
           class="form-control"
           id="password"
           type="password"
         />
+        <div
+          *ngIf="passwordError"
+          class="invalid-feedback"
+          data-testid="password-validation"
+        >{{ passwordError }}</div>
       </div>
       <div class="mb-3">
         <label
