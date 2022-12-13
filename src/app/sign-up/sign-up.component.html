@@ -74,11 +74,17 @@
           for="passwordRepeat"
         >Password Repeat</label>
         <input
+          [class.is-invalid]="getPasswordRepeatError"
           formControlName="passwordRepeat"
           class="form-control"
           id="passwordRepeat"
           type="password"
         />
+        <div
+          *ngIf="getPasswordRepeatError"
+          class="invalid-feedback"
+          data-testid="passwordRepeat-validation"
+        >{{ getPasswordRepeatError }}</div>
       </div>
       <div class="text-center">
         <app-button

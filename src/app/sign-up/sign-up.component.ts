@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators
 } from "@angular/forms";
+import { passwordMatchValidator } from "./password-match.validator";
 
 @Component({
   selector: 'app-sign-up',
@@ -18,10 +19,16 @@ export class SignUpComponent {
       Validators.required,
       Validators.minLength(4)
     ]),
-    email: new FormControl<string>("", [Validators.required]),
-    password: new FormControl<string>("", [Validators.required]),
+    email: new FormControl<string>("", [
+      Validators.required,
+      Validators.email
+    ]),
+    password: new FormControl<string>("", [
+      Validators.required,
+      Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
+    ]),
     passwordRepeat: new FormControl<string>(""),
-  });
+  }, { validators: passwordMatchValidator });
 
   apiProgress = false;
   signUpSuccess = false;
@@ -46,6 +53,8 @@ export class SignUpComponent {
     if ((field?.errors && (field?.touched || field?.dirty))) {
       if (field.errors['required']) {
         return "E-mail is required";
+      } else if (field.errors['email']) {
+        return "Invalid e-mail address"
       }
     }
     return;
@@ -56,6 +65,17 @@ export class SignUpComponent {
     if ((field?.errors && (field?.touched || field?.dirty))) {
       if (field.errors['required']) {
         return "Password is required";
+      } else if (field.errors['pattern']) {
+        return "Password must have at least 1 uppercase, 1 lowercase letter and 1 number";
+      }
+    }
+    return;
+  }
+
+  get getPasswordRepeatError() {
+    if (this.form?.errors && (this.form?.touched || this.form?.dirty)) {
+      if (this.form?.errors['passwordMatch']) {
+        return "Password mismatch";
       }
     }
     return;
