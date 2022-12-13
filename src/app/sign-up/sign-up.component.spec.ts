@@ -126,6 +126,7 @@ describe('SignUpComponent', () => {
 
       usernameInput.dispatchEvent(new Event('input'));
       emailInput.dispatchEvent(new Event('input'));
+      emailInput.dispatchEvent(new Event('blur'));
       passwordInput.dispatchEvent(new Event('input'));
       passwordRepeatInput.dispatchEvent(new Event('input'));
 
@@ -201,24 +202,68 @@ describe('SignUpComponent', () => {
   describe('Validation', () => {
 
     const testCases = [
-      { field: 'username', value: '', error: 'Username is required' },
-      { field: 'username', value: '123', error: 'Username must be at least 4 characters long' },
-      { field: 'email', value: '', error: 'E-mail is required' },
-      { field: 'email', value: 'wrong-format', error: 'Invalid e-mail address' },
-      { field: 'password', value: '', error: 'Password is required' },
-      { field: 'password', value: 'password', error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number' },
-      { field: 'password', value: 'passWORD', error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number' },
-      { field: 'password', value: 'pass1234', error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number' },
-      { field: 'password', value: 'PASS1234', error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number' },
-      { field: 'passwordRepeat', value: 'pass', error: 'Password mismatch' },
+      {
+        field: 'username',
+        value: '',
+        error: 'Username is required'
+      },
+      {
+        field: 'username',
+        value: '123',
+        error: 'Username must be at least 4 characters long'
+      },
+      {
+        field: 'email',
+        value: '',
+        error: 'E-mail is required'
+      },
+      {
+        field: 'email',
+        value: 'wrong-format',
+        error: 'Invalid e-mail address'
+      },
+      {
+        field: 'password',
+        value: '',
+        error: 'Password is required'
+      },
+      {
+        field: 'password',
+        value: 'password',
+        error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'
+      },
+      {
+        field: 'password',
+        value: 'passWORD',
+        error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'
+      },
+      {
+        field: 'password',
+        value: 'pass1234',
+        error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'
+      },
+      {
+        field: 'password',
+        value: 'PASS1234',
+        error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'
+      },
+      {
+        field: 'passwordRepeat',
+        value: 'pass',
+        error: 'Password mismatch'
+      },
     ];
 
-    testCases.forEach(({ field, value, error }) => {
-      it(`displays ${error} when ${field} has '${value}'`, () => {
+    testCases.forEach(({
+                         field,
+                         value,
+                         error
+                       }) => {
+      it(`displays ${ error } when ${ field } has '${ value }'`, () => {
         const signUp = fixture.nativeElement as HTMLElement;
 
-        expect(signUp.querySelector(`div[data-testid="${field}-validation"]`)).toBeNull();
-        const input = signUp.querySelector(`input[id="${field}"]`) as HTMLInputElement;
+        expect(signUp.querySelector(`div[data-testid="${ field }-validation"]`)).toBeNull();
+        const input = signUp.querySelector(`input[id="${ field }"]`) as HTMLInputElement;
 
         input.value = value;
 
@@ -227,10 +272,38 @@ describe('SignUpComponent', () => {
 
         fixture.detectChanges();
 
-        const validationElement = signUp.querySelector(`div[data-testid="${field}-validation"]`);
+        const validationElement = signUp.querySelector(`div[data-testid="${ field }-validation"]`);
         expect(validationElement?.textContent).toContain(error);
       })
     });
+
+    it(`displays E-mail in use when email is not unique'`, () => {
+      const httpTestingController = TestBed.inject(HttpTestingController);
+      const signUp = fixture.nativeElement as HTMLElement;
+
+      expect(signUp.querySelector(`div[data-testid="email-validation"]`)).toBeNull();
+      const input = signUp.querySelector(`input[id="email"]`) as HTMLInputElement;
+
+      input.value = "non-unique-email@mail.com";
+
+      input.dispatchEvent(new Event('input'));
+      input.dispatchEvent(new Event('blur'));
+
+      const request = httpTestingController.expectOne((req) => {
+        const { url, method, body } = req;
+
+        if (url === '/api/1.0/user/email' && method === 'POST') {
+          return body.email === "non-unique-email@mail.com";
+        }
+
+        return false;
+      })
+      request.flush({});
+      fixture.detectChanges();
+
+      const validationElement = signUp.querySelector(`div[data-testid="email-validation"]`);
+      expect(validationElement?.textContent).toContain("E-mail in use");
+    })
   })
 });
 

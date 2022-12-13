@@ -6,6 +6,7 @@ import {
   Validators
 } from "@angular/forms";
 import { passwordMatchValidator } from "./password-match.validator";
+import { UniqueEmailValidator } from "./unique-email.validator";
 
 @Component({
   selector: 'app-sign-up',
@@ -19,10 +20,14 @@ export class SignUpComponent {
       Validators.required,
       Validators.minLength(4)
     ]),
-    email: new FormControl<string>("", [
-      Validators.required,
-      Validators.email
-    ]),
+    email: new FormControl<string>("", {
+      validators: [
+        Validators.required,
+        Validators.email
+      ],
+      asyncValidators: [ this.uniqueEmailValidator.validate.bind(this.uniqueEmailValidator) ],
+      updateOn: 'blur'
+    }),
     password: new FormControl<string>("", [
       Validators.required,
       Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/)
@@ -33,7 +38,10 @@ export class SignUpComponent {
   apiProgress = false;
   signUpSuccess = false;
 
-  constructor(private userService: UserService) {
+  constructor(
+    private userService: UserService,
+    private uniqueEmailValidator: UniqueEmailValidator
+  ) {
   }
 
   get usernameError() {
@@ -54,7 +62,9 @@ export class SignUpComponent {
       if (field.errors['required']) {
         return "E-mail is required";
       } else if (field.errors['email']) {
-        return "Invalid e-mail address"
+        return "Invalid e-mail address";
+      } else if (field.errors['uniqueEmail']) {
+        return "E-mail in use";
       }
     }
     return;
