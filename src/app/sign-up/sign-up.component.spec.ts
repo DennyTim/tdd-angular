@@ -1,18 +1,18 @@
 import {
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
-
-import { SignUpComponent } from './sign-up.component';
-import {
   HttpClientTestingModule,
   HttpTestingController
 } from "@angular/common/http/testing";
-import { SharedModule } from "../shared/shared.module";
+import {
+  ComponentFixture,
+  TestBed
+} from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
+import { SharedModule } from "../shared/shared.module";
+
+import { SignUpComponent } from "./sign-up.component";
 
 
-describe('SignUpComponent', () => {
+describe("SignUpComponent", () => {
   let component: SignUpComponent;
   let fixture: ComponentFixture<SignUpComponent>;
 
@@ -23,7 +23,7 @@ describe('SignUpComponent', () => {
         SharedModule,
         ReactiveFormsModule
       ],
-      declarations: [ SignUpComponent ]
+      declarations: [SignUpComponent]
     })
       .compileComponents();
   });
@@ -32,77 +32,77 @@ describe('SignUpComponent', () => {
     fixture = TestBed.createComponent(SignUpComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  })
+  });
 
-  describe('Layout', () => {
-    it('has Sign Up header', () => {
+  describe("Layout", () => {
+    it("has Sign Up header", () => {
       const signUp = fixture.nativeElement as HTMLElement;
-      const h1 = signUp.querySelector('h1');
-      expect(h1?.textContent).toBe('Sign Up');
+      const h1 = signUp.querySelector("h1");
+      expect(h1?.textContent).toBe("Sign Up");
     });
 
-    it('has username input', () => {
+    it("has username input", () => {
       const signUp = fixture.nativeElement as HTMLElement;
-      const label = signUp.querySelector('label[for="username"]')
-      const input = signUp.querySelector('input[id="username"]');
+      const label = signUp.querySelector("label[for=\"username\"]");
+      const input = signUp.querySelector("input[id=\"username\"]");
       expect(input).toBeTruthy();
       expect(label).toBeTruthy();
-      expect(label?.textContent).toContain('Username');
+      expect(label?.textContent).toContain("Username");
     });
 
-    it('has email input', () => {
+    it("has email input", () => {
       const signUp = fixture.nativeElement as HTMLElement;
-      const label = signUp.querySelector('label[for="email"]')
-      const input = signUp.querySelector('input[id="email"]');
+      const label = signUp.querySelector("label[for=\"email\"]");
+      const input = signUp.querySelector("input[id=\"email\"]");
       expect(input).toBeTruthy();
       expect(label).toBeTruthy();
-      expect(label?.textContent).toContain('E-mail');
+      expect(label?.textContent).toContain("E-mail");
     });
 
-    it('has password input', () => {
+    it("has password input", () => {
       const signUp = fixture.nativeElement as HTMLElement;
-      const label = signUp.querySelector('label[for="password"]')
-      const input = signUp.querySelector('input[id="password"]');
+      const label = signUp.querySelector("label[for=\"password\"]");
+      const input = signUp.querySelector("input[id=\"password\"]");
       expect(input).toBeTruthy();
       expect(label).toBeTruthy();
-      expect(label?.textContent).toContain('Password');
+      expect(label?.textContent).toContain("Password");
     });
 
-    it('has password type for password input', () => {
+    it("has password type for password input", () => {
       const signUp = fixture.nativeElement as HTMLElement;
-      const input = signUp.querySelector('input[id="password"]') as HTMLInputElement;
-      expect(input.type).toBe('password');
+      const input = signUp.querySelector("input[id=\"password\"]") as HTMLInputElement;
+      expect(input.type).toBe("password");
     });
 
-    it('has password repeat input', () => {
+    it("has password repeat input", () => {
       const signUp = fixture.nativeElement as HTMLElement;
-      const label = signUp.querySelector('label[for="passwordRepeat"]')
-      const input = signUp.querySelector('input[id="passwordRepeat"]');
+      const label = signUp.querySelector("label[for=\"passwordRepeat\"]");
+      const input = signUp.querySelector("input[id=\"passwordRepeat\"]");
       expect(input).toBeTruthy();
       expect(label).toBeTruthy();
-      expect(label?.textContent).toContain('Password Repeat');
+      expect(label?.textContent).toContain("Password Repeat");
     });
 
-    it('has password type for password repeat input', () => {
+    it("has password type for password repeat input", () => {
       const signUp = fixture.nativeElement as HTMLElement;
-      const input = signUp.querySelector('input[id="passwordRepeat"]') as HTMLInputElement;
-      expect(input.type).toBe('password');
+      const input = signUp.querySelector("input[id=\"passwordRepeat\"]") as HTMLInputElement;
+      expect(input.type).toBe("password");
     });
 
-    it('has Sign Up button', () => {
+    it("has Sign Up button", () => {
       const signUp = fixture.nativeElement as HTMLElement;
-      const button = signUp.querySelector('button');
-      expect(button?.textContent).toContain('Sign Up');
+      const button = signUp.querySelector("button");
+      expect(button?.textContent).toContain("Sign Up");
     });
 
-    it('disables the button initially', () => {
+    it("disables the button initially", () => {
       const signUp = fixture.nativeElement as HTMLElement;
-      const button = signUp.querySelector('button');
+      const button = signUp.querySelector("button");
       expect(button?.disabled).toBeTruthy();
     });
   });
 
-  describe('Interactions', () => {
+  describe("Interactions", () => {
     let button: any;
     let signUp: HTMLElement;
     let httpTestingController: HttpTestingController;
@@ -110,49 +110,49 @@ describe('SignUpComponent', () => {
     const setupForm = async () => {
       httpTestingController = TestBed.inject(HttpTestingController);
       signUp = fixture.nativeElement as HTMLElement;
-      button = signUp.querySelector('button');
+      button = signUp.querySelector("button");
 
       await fixture.whenStable();
 
-      const usernameInput = signUp.querySelector('input[id="username"]') as HTMLInputElement;
-      const emailInput = signUp.querySelector('input[id="email"]') as HTMLInputElement;
-      const passwordInput = signUp.querySelector('input[id="password"]') as HTMLInputElement;
-      const passwordRepeatInput = signUp.querySelector('input[id="passwordRepeat"]') as HTMLInputElement;
+      const usernameInput = signUp.querySelector("input[id=\"username\"]") as HTMLInputElement;
+      const emailInput = signUp.querySelector("input[id=\"email\"]") as HTMLInputElement;
+      const passwordInput = signUp.querySelector("input[id=\"password\"]") as HTMLInputElement;
+      const passwordRepeatInput = signUp.querySelector("input[id=\"passwordRepeat\"]") as HTMLInputElement;
 
       usernameInput.value = "user1";
       emailInput.value = "user1@mail.com";
-      passwordInput.value = 'P4ssword';
-      passwordRepeatInput.value = 'P4ssword';
+      passwordInput.value = "P4ssword";
+      passwordRepeatInput.value = "P4ssword";
 
-      usernameInput.dispatchEvent(new Event('input'));
-      emailInput.dispatchEvent(new Event('input'));
-      emailInput.dispatchEvent(new Event('blur'));
-      passwordInput.dispatchEvent(new Event('input'));
-      passwordRepeatInput.dispatchEvent(new Event('input'));
+      usernameInput.dispatchEvent(new Event("input"));
+      emailInput.dispatchEvent(new Event("input"));
+      emailInput.dispatchEvent(new Event("blur"));
+      passwordInput.dispatchEvent(new Event("input"));
+      passwordRepeatInput.dispatchEvent(new Event("input"));
 
       fixture.detectChanges();
-    }
+    };
 
-    it('enables the button when the password and password repeat fields have same value', async () => {
+    it("enables the button when the password and password repeat fields have same value", async () => {
       await setupForm();
       expect(button?.disabled).toBeFalsy();
     });
 
-    it('sends username, email and password to BE after clicking the button', async () => {
+    it("sends username, email and password to BE after clicking the button", async () => {
       await setupForm();
       button?.click();
 
       const req = httpTestingController.expectOne("/api/1.0/users");
-      const requestBody = req.request.body
+      const requestBody = req.request.body;
 
       expect(requestBody).toEqual({
         username: "user1",
-        password: 'P4ssword',
-        email: "user1@mail.com",
+        password: "P4ssword",
+        email: "user1@mail.com"
       });
     });
 
-    it('disables button when there is an ongoing api call', async () => {
+    it("disables button when there is an ongoing api call", async () => {
       await setupForm();
       button?.click();
       fixture.detectChanges();
@@ -162,32 +162,32 @@ describe('SignUpComponent', () => {
       expect(button.disabled).toBeTruthy();
     });
 
-    it('displays spinner after clicking the submit', async () => {
+    it("displays spinner after clicking the submit", async () => {
       await setupForm();
-      expect(signUp.querySelector('span[role="status"]')).toBeFalsy();
+      expect(signUp.querySelector("span[role=\"status\"]")).toBeFalsy();
       button.click();
       fixture.detectChanges();
-      expect(signUp.querySelector('span[role="status"]')).toBeTruthy();
+      expect(signUp.querySelector("span[role=\"status\"]")).toBeTruthy();
     });
 
-    it('displays account activation notification after successful sign up request', async () => {
+    it("displays account activation notification after successful sign up request", async () => {
       await setupForm();
 
-      expect(signUp.querySelector('.alert-success')).toBeFalsy();
+      expect(signUp.querySelector(".alert-success")).toBeFalsy();
 
       button.click();
       const req = httpTestingController.expectOne("/api/1.0/users");
       req.flush({});
       fixture.detectChanges();
-      const message = signUp.querySelector('.alert-success');
+      const message = signUp.querySelector(".alert-success");
 
-      expect(message?.textContent).toContain('Please check your e-mail to activate your account');
-    })
+      expect(message?.textContent).toContain("Please check your e-mail to activate your account");
+    });
 
-    it('hides sign up form successful sign up request', async () => {
+    it("hides sign up form successful sign up request", async () => {
       await setupForm();
 
-      expect(signUp.querySelector('div[data-testid="form-sign-up"]')).toBeTruthy();
+      expect(signUp.querySelector("div[data-testid=\"form-sign-up\"]")).toBeTruthy();
 
       button.click();
 
@@ -195,86 +195,100 @@ describe('SignUpComponent', () => {
       req.flush({});
       fixture.detectChanges();
 
-      expect(signUp.querySelector('div[data-testid="form-sign-up"]')).toBeFalsy();
-    })
+      expect(signUp.querySelector("div[data-testid=\"form-sign-up\"]")).toBeFalsy();
+    });
+
+    it("displays validation error coming from backend after submit failure", async () => {
+      await setupForm();
+      button.click();
+
+      const req = httpTestingController.expectOne("/api/1.0/users");
+      req.flush({
+        validationErrors: { email: "E-mail in use" }
+      }, {
+        status: 400,
+        statusText: "Bad request"
+      });
+      fixture.detectChanges();
+
+      const validationElement = signUp.querySelector(`div[data-testid="email-validation"]`);
+      expect(validationElement?.textContent).toContain("E-mail in use");
+    });
   });
 
-  describe('Validation', () => {
+  describe("Validation", () => {
 
     const testCases = [
       {
-        field: 'username',
-        value: '',
-        error: 'Username is required'
+        field: "username",
+        value: "",
+        error: "Username is required"
       },
       {
-        field: 'username',
-        value: '123',
-        error: 'Username must be at least 4 characters long'
+        field: "username",
+        value: "123",
+        error: "Username must be at least 4 characters long"
       },
       {
-        field: 'email',
-        value: '',
-        error: 'E-mail is required'
+        field: "email",
+        value: "",
+        error: "E-mail is required"
       },
       {
-        field: 'email',
-        value: 'wrong-format',
-        error: 'Invalid e-mail address'
+        field: "email",
+        value: "wrong-format",
+        error: "Invalid e-mail address"
       },
       {
-        field: 'password',
-        value: '',
-        error: 'Password is required'
+        field: "password",
+        value: "",
+        error: "Password is required"
       },
       {
-        field: 'password',
-        value: 'password',
-        error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'
+        field: "password",
+        value: "password",
+        error: "Password must have at least 1 uppercase, 1 lowercase letter and 1 number"
       },
       {
-        field: 'password',
-        value: 'passWORD',
-        error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'
+        field: "password",
+        value: "passWORD",
+        error: "Password must have at least 1 uppercase, 1 lowercase letter and 1 number"
       },
       {
-        field: 'password',
-        value: 'pass1234',
-        error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'
+        field: "password",
+        value: "pass1234",
+        error: "Password must have at least 1 uppercase, 1 lowercase letter and 1 number"
       },
       {
-        field: 'password',
-        value: 'PASS1234',
-        error: 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number'
+        field: "password",
+        value: "PASS1234",
+        error: "Password must have at least 1 uppercase, 1 lowercase letter and 1 number"
       },
       {
-        field: 'passwordRepeat',
-        value: 'pass',
-        error: 'Password mismatch'
-      },
+        field: "passwordRepeat",
+        value: "pass",
+        error: "Password mismatch"
+      }
     ];
 
-    testCases.forEach(({
-                         field,
-                         value,
-                         error
-                       }) => {
-      it(`displays ${ error } when ${ field } has '${ value }'`, () => {
+    testCases.forEach((payload) => {
+      const { field, value, error } = payload;
+      it(`displays ${error} when ${field} has '${value}'`, () => {
         const signUp = fixture.nativeElement as HTMLElement;
 
-        expect(signUp.querySelector(`div[data-testid="${ field }-validation"]`)).toBeNull();
-        const input = signUp.querySelector(`input[id="${ field }"]`) as HTMLInputElement;
+        expect(signUp.querySelector(`div[data-testid="${field}-validation"]`)).toBeNull();
+        const input = signUp.querySelector(`input[id="${field}"]`) as HTMLInputElement;
 
         input.value = value;
 
-        input.dispatchEvent(new Event('input'));
-        input.dispatchEvent(new Event('blur'));
+        input.dispatchEvent(new Event("input"));
+        input.dispatchEvent(new Event("blur"));
 
         fixture.detectChanges();
 
-        const validationElement = signUp.querySelector(`div[data-testid="${ field }-validation"]`);
+        const validationElement = signUp.querySelector(`div[data-testid="${field}-validation"]`);
         expect(validationElement?.textContent).toContain(error);
-      })
+      });
     });
 
     it(`displays E-mail in use when email is not unique'`, () => {
@@ -286,25 +300,25 @@ describe('SignUpComponent', () => {
 
       input.value = "non-unique-email@mail.com";
 
-      input.dispatchEvent(new Event('input'));
-      input.dispatchEvent(new Event('blur'));
+      input.dispatchEvent(new Event("input"));
+      input.dispatchEvent(new Event("blur"));
 
       const request = httpTestingController.expectOne((req) => {
         const { url, method, body } = req;
 
-        if (url === '/api/1.0/user/email' && method === 'POST') {
+        if (url === "/api/1.0/user/email" && method === "POST") {
           return body.email === "non-unique-email@mail.com";
         }
 
         return false;
-      })
+      });
       request.flush({});
       fixture.detectChanges();
 
       const validationElement = signUp.querySelector(`div[data-testid="email-validation"]`);
       expect(validationElement?.textContent).toContain("E-mail in use");
-    })
-  })
+    });
+  });
 });
 
 
