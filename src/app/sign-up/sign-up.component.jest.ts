@@ -1,15 +1,15 @@
+import { HttpClientModule } from "@angular/common/http";
+import { ReactiveFormsModule } from "@angular/forms";
 import {
   render,
   screen,
   waitFor
-} from '@testing-library/angular';
-import { SignUpComponent } from './sign-up.component'
+} from "@testing-library/angular";
 import userEvent from "@testing-library/user-event";
 import { rest } from "msw";
-import { setupServer } from "msw/node"
-import { HttpClientModule } from "@angular/common/http";
+import { setupServer } from "msw/node";
 import { SharedModule } from "../shared/shared.module";
-import { ReactiveFormsModule } from "@angular/forms";
+import { SignUpComponent } from "./sign-up.component";
 
 type UniqueEmailCheck = {
   email: string;
@@ -18,21 +18,29 @@ type UniqueEmailCheck = {
 let requestBody: any;
 let counter = 0;
 const server = setupServer(
-  rest.post('/api/1.0/users', (req, res, ctx) => {
+  rest.post("/api/1.0/users", (req, res, ctx) => {
     requestBody = req.body;
     counter += 1;
+    if (requestBody.email === "non-unique-email@mail.com") {
+      return res(ctx.status(400), ctx.json({
+        validationErrors: { email: "E-mail in use" }
+      }));
+    }
     return res(ctx.status(200), ctx.json({}));
   }),
-  rest.post('/api/1.0/user/email', (req, res, ctx) => {
+  rest.post("/api/1.0/user/email", (req, res, ctx) => {
     const body = req.body as UniqueEmailCheck;
-    if (body.email === 'non-unique-email@mail.com') {
-      return res(ctx.status(200), ctx.json({}))
+    if (body.email === "non-unique-email@mail.com") {
+      return res(ctx.status(200), ctx.json({}));
     }
     return res(ctx.status(404), ctx.json({}));
   })
 );
 
-beforeEach(() => (counter = 0));
+beforeEach(() => {
+  counter = 0;
+  server.resetHandlers();
+});
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 
@@ -43,153 +51,160 @@ const setup = async () => {
       SharedModule,
       ReactiveFormsModule
     ]
-  })
-}
+  });
+};
 
 describe("SignUpComponent", () => {
-  describe('Layout', () => {
-    it('has Sign Up header', async () => {
+  describe("Layout", () => {
+    it("has Sign Up header", async () => {
       await setup();
-      const header = screen.getByRole('heading', { name: 'Sign Up' });
+      const header = screen.getByRole("heading", { name: "Sign Up" });
       expect(header).toBeInTheDocument();
     });
 
-    it('has username input', async () => {
+    it("has username input", async () => {
       await setup();
 
-      expect(screen.getByLabelText('Username')).toBeInTheDocument();
+      expect(screen.getByLabelText("Username")).toBeInTheDocument();
     });
 
-    it('has email input', async () => {
+    it("has email input", async () => {
       await setup();
 
-      expect(screen.getByLabelText('E-mail')).toBeInTheDocument();
+      expect(screen.getByLabelText("E-mail")).toBeInTheDocument();
     });
 
-    it('has password input', async () => {
+    it("has password input", async () => {
       await setup();
 
-      expect(screen.getByLabelText('Password')).toBeInTheDocument();
+      expect(screen.getByLabelText("Password")).toBeInTheDocument();
     });
 
-    it('has password type for password input', async () => {
+    it("has password type for password input", async () => {
       await setup();
-      const input = screen.getByLabelText('Password');
+      const input = screen.getByLabelText("Password");
 
-      expect(input).toHaveAttribute('type', 'password');
+      expect(input).toHaveAttribute("type", "password");
     });
 
-    it('has password repeat input', async () => {
+    it("has password repeat input", async () => {
       await setup();
 
-      expect(screen.getByLabelText('Password Repeat')).toBeInTheDocument();
+      expect(screen.getByLabelText("Password Repeat")).toBeInTheDocument();
     });
 
-    it('has password type for password repeat input', async () => {
+    it("has password type for password repeat input", async () => {
       await setup();
-      const input = screen.getByLabelText('Password Repeat');
+      const input = screen.getByLabelText("Password Repeat");
 
-      expect(input).toHaveAttribute('type', 'password');
+      expect(input).toHaveAttribute("type", "password");
     });
 
-    it('has Sign Up button', async () => {
+    it("has Sign Up button", async () => {
       await setup();
-      const button = screen.getByRole('button', { name: 'Sign Up' });
+      const button = screen.getByRole("button", { name: "Sign Up" });
 
       expect(button).toBeInTheDocument();
     });
 
-    it('disables the button initially', async () => {
+    it("disables the button initially", async () => {
       await setup();
-      const button = screen.getByRole('button', { name: 'Sign Up' });
+      const button = screen.getByRole("button", { name: "Sign Up" });
 
       expect(button).toBeDisabled();
     });
-  })
+  });
 
-  describe('Interactions', () => {
+  describe("Interactions", () => {
     let button: any;
 
-    const setupForm = async () => {
+    const setupForm = async (values?: { email: string }) => {
       await setup();
 
-      const username = screen.getByLabelText('Username');
-      const email = screen.getByLabelText('E-mail');
-      const password = screen.getByLabelText('Password');
-      const passwordRepeat = screen.getByLabelText('Password Repeat');
+      const username = screen.getByLabelText("Username");
+      const email = screen.getByLabelText("E-mail");
+      const password = screen.getByLabelText("Password");
+      const passwordRepeat = screen.getByLabelText("Password Repeat");
 
       await userEvent.type(username, "user1");
-      await userEvent.type(email, "user1@mail.com");
+      await userEvent.type(email, values?.email || "user1@mail.com");
       await userEvent.type(password, "P4ssword");
       await userEvent.type(passwordRepeat, "P4ssword");
 
-      button = screen.getByRole('button', { name: 'Sign Up' });
-    }
+      button = screen.getByRole("button", { name: "Sign Up" });
+    };
 
-    it('enables the button when the password and password repeat fields have same value', async () => {
+    it("enables the button when the password and password repeat fields have same value", async () => {
       await setupForm();
       expect(button).toBeEnabled();
     });
 
-    it('sends username, email and password to BE after clicking the button', async () => {
+    it("sends username, email and password to BE after clicking the button", async () => {
       await setupForm();
       await userEvent.click(button);
       await waitFor(() =>
         expect(requestBody).toEqual({
           username: "user1",
-          password: 'P4ssword',
-          email: "user1@mail.com",
+          password: "P4ssword",
+          email: "user1@mail.com"
         })
       );
     });
 
-    it('disables button when there is an ongoing api call', async () => {
+    it("disables button when there is an ongoing api call", async () => {
       await setupForm();
       await userEvent.click(button);
       await userEvent.click(button);
       await waitFor(() => expect(counter).toBe(1));
     });
 
-    it('displays spinner after clicking the submit', async () => {
+    it("displays spinner after clicking the submit", async () => {
       await setupForm();
       expect(screen.queryByRole("status")).not.toBeInTheDocument();
       await userEvent.click(button);
       expect(screen.queryByRole("status")).toBeInTheDocument();
-    })
+    });
 
-    it('displays account activation notification after successful sign up request', async () => {
+    it("displays account activation notification after successful sign up request", async () => {
       await setupForm();
 
-      expect(screen.queryByText('Please check your e-mail to activate your account')).not.toBeInTheDocument();
+      expect(screen.queryByText("Please check your e-mail to activate your account")).not.toBeInTheDocument();
       await userEvent.click(button);
-      const text = await screen.findByText('Please check your e-mail to activate your account');
+      const text = await screen.findByText("Please check your e-mail to activate your account");
       expect(text).toBeInTheDocument();
-    })
+    });
 
-    it('hides sign up form successful sign up request', async () => {
+    it("hides sign up form successful sign up request", async () => {
       await setupForm();
-      const form = screen.getByTestId('form-sign-up');
+      const form = screen.getByTestId("form-sign-up");
       await userEvent.click(button);
-      await screen.findByText('Please check your e-mail to activate your account');
+      await screen.findByText("Please check your e-mail to activate your account");
       expect(form).not.toBeInTheDocument();
-    })
+    });
+
+    it("displays validation error coming from backend after submit failure", async () => {
+      await setupForm({ email: "non-unique-email@mail.com" });
+      await userEvent.click(button);
+      const errorMessage = await screen.findByText("E-mail in use");
+      expect(errorMessage).toBeInTheDocument();
+    });
   });
 
-  describe('Validation', () => {
+  describe("Validation", () => {
 
     it.each`
-      label               | inputValue                      | message
-      ${ 'Username' }       | ${ '{space}{backspace}' }         | ${ 'Username is required' }
-      ${ 'Username' }       | ${ '123' }                        | ${ 'Username must be at least 4 characters long' }
-      ${ 'E-mail' }         | ${ '{space}{backspace}' }         | ${ 'E-mail is required' }
-      ${ 'E-mail' }         | ${ 'wrong-format' }               | ${ 'Invalid e-mail address' }
-      ${ 'Password' }       | ${ '{space}{backspace}' }         | ${ 'Password is required' }
-      ${ 'Password' }       | ${ 'password' }                   | ${ 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number' }
-      ${ 'Password' }       | ${ 'passWORD' }                   | ${ 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number' }
-      ${ 'Password' }       | ${ 'pass1234' }                   | ${ 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number' }
-      ${ 'Password' }       | ${ 'PASS1234' }                   | ${ 'Password must have at least 1 uppercase, 1 lowercase letter and 1 number' }
-      ${ 'Password Repeat' }| ${ 'pass' }                       | ${ 'Password mismatch' }
-      ${ 'E-mail' }         | ${ 'non-unique-email@mail.com' }  | ${ 'E-mail in use' }
+      label                 | inputValue                        | message
+      ${"Username"}       | ${"{space}{backspace}"}         | ${"Username is required"}
+      ${"Username"}       | ${"123"}                        | ${"Username must be at least 4 characters long"}
+      ${"E-mail"}         | ${"{space}{backspace}"}         | ${"E-mail is required"}
+      ${"E-mail"}         | ${"wrong-format"}               | ${"Invalid e-mail address"}
+      ${"Password"}       | ${"{space}{backspace}"}         | ${"Password is required"}
+      ${"Password"}       | ${"password"}                   | ${"Password must have at least 1 uppercase, 1 lowercase letter and 1 number"}
+      ${"Password"}       | ${"passWORD"}                   | ${"Password must have at least 1 uppercase, 1 lowercase letter and 1 number"}
+      ${"Password"}       | ${"pass1234"}                   | ${"Password must have at least 1 uppercase, 1 lowercase letter and 1 number"}
+      ${"Password"}       | ${"PASS1234"}                   | ${"Password must have at least 1 uppercase, 1 lowercase letter and 1 number"}
+      ${"Password Repeat"}| ${"pass"}                       | ${"Password mismatch"}
+      ${"E-mail"}         | ${"non-unique-email@mail.com"}  | ${"E-mail in use"}
     `("displays $message when $label has the value '$inputValue'", async (payload) => {
       const {
         label,
@@ -200,10 +215,10 @@ describe("SignUpComponent", () => {
       expect(screen.queryByText(message)).not.toBeInTheDocument();
       const usernameInput = screen.getByLabelText(label);
       await userEvent.type(usernameInput, inputValue);
-      await userEvent.tab()
+      await userEvent.tab();
       const errorMessage = await screen.findByText(message);
       expect(errorMessage).toBeInTheDocument();
     });
-  })
-})
+  });
+});
 
