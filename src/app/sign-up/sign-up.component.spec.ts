@@ -214,6 +214,22 @@ describe("SignUpComponent", () => {
       const validationElement = signUp.querySelector(`div[data-testid="email-validation"]`);
       expect(validationElement?.textContent).toContain("E-mail in use");
     });
+
+    it('hides spinner after sign up request fails', async () => {
+      await setupForm();
+      button.click();
+
+      const req = httpTestingController.expectOne("/api/1.0/users");
+      req.flush({
+        validationErrors: { email: "E-mail in use" }
+      }, {
+        status: 400,
+        statusText: "Bad request"
+      });
+      fixture.detectChanges();
+
+      expect(signUp.querySelector('span[role="status"]')).toBeFalsy();
+    })
   });
 
   describe("Validation", () => {

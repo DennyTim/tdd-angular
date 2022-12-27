@@ -188,6 +188,13 @@ describe("SignUpComponent", () => {
       const errorMessage = await screen.findByText("E-mail in use");
       expect(errorMessage).toBeInTheDocument();
     });
+
+    it('hides spinner after sign up request fails', async () => {
+      await setupForm({ email: "non-unique-email@mail.com" });
+      await userEvent.click(button);
+      await screen.findByText("E-mail in use");
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
   });
 
   describe("Validation", () => {

@@ -106,6 +106,7 @@ export class SignUpComponent {
       error: (httpError: HttpErrorResponse) => {
         const emailValidationErrorMessage = httpError.error.validationErrors.email;
         this.form.get("email")?.setErrors({ backend: emailValidationErrorMessage });
+        this.apiProgress = false;
       }
     });
   }
