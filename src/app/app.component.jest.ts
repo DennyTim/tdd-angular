@@ -10,12 +10,16 @@ import { SharedModule } from "./shared/shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { routes } from "./router/app-router.module";
 import userEvent from "@testing-library/user-event";
+import { LoginComponent } from "./login/login.component";
+import { ActivateComponent } from "./activate/activate.component";
 
 const setup = async (path: string) => {
   const { navigate } = await render(AppComponent, {
     declarations: [
       HomeComponent,
-      SignUpComponent
+      SignUpComponent,
+      LoginComponent,
+      ActivateComponent
     ],
     imports: [
       HttpClientModule,
@@ -37,6 +41,8 @@ describe('Routing', () => {
     ${ '/login' } | ${ 'login-page' }
     ${ '/user/1' } | ${ 'user-page' }
     ${ '/user/2' } | ${ 'user-page' }
+    ${ '/activate/123' } | ${ 'activation-page' }
+    ${ '/activate/456' } | ${ 'activation-page' }
   `('displays $pageId when path is $path', async (data) => {
     const {
       path,

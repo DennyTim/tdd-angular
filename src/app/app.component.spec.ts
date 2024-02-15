@@ -35,7 +35,7 @@ describe('AppComponent', () => {
 
   describe('Routing', () => {
 
-    const testCases = [
+    const routingTests = [
       {
         path: '/',
         pageId: 'home-page'
@@ -55,10 +55,18 @@ describe('AppComponent', () => {
       {
         path: '/user/2',
         pageId: 'user-page'
+      },
+      {
+        path: '/activate/123',
+        pageId: 'activation-page'
+      },
+      {
+        path: '/activate/456',
+        pageId: 'activation-page'
       }
     ];
 
-    testCases.forEach((payload) => {
+    routingTests.forEach((payload) => {
       const {
         path,
         pageId

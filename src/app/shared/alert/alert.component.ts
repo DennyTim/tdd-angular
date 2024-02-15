@@ -9,5 +9,15 @@ import {
   styles: []
 })
 export class AlertComponent {
-  @Input() text: string = '';
+  @Input()
+  public text: string = '';
+
+  @Input()
+  public type: 'success' | 'danger' | 'info' = 'success';
+
+  get alertClass() {
+    const classList = ['alert'];
+    classList.push(`alert-${this.type}`);
+    return classList.join(' ');
+  }
 }
