@@ -12,7 +12,7 @@ import {tap} from "rxjs";
   styles: []
 })
 export class ActivateComponent implements OnInit {
-  activationStatus!: 'success' | 'fail';
+  activationStatus!: 'success' | 'fail' | 'inProgress';
 
   constructor(
     private route: ActivatedRoute,
@@ -22,6 +22,8 @@ export class ActivateComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
+      this.activationStatus = 'inProgress';
+
       this.userService.activate(params['id'])
         .subscribe({
           next: () => {
