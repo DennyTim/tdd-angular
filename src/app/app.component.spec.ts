@@ -6,9 +6,20 @@ import {
 } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { routes } from "./router/app-router.module";
+import {AppRouterModule, routes} from "./router/app-router.module";
 import { Router } from "@angular/router";
 import { AppModule } from "./app.module";
+import {SignUpComponent} from "./sign-up/sign-up.component";
+import {HomeComponent} from "./home/home.component";
+import {LoginComponent} from "./login/login.component";
+import {UserComponent} from "./user/user.component";
+import {ActivateComponent} from "./activate/activate.component";
+import {UserListComponent} from "./home/user-list/user-list.component";
+import {BrowserModule} from "@angular/platform-browser";
+import {HttpClientModule} from "@angular/common/http";
+import {SharedModule} from "./shared/shared.module";
+import {ReactiveFormsModule} from "@angular/forms";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -18,10 +29,21 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      declarations: [
+        AppComponent,
+        SignUpComponent,
+        HomeComponent,
+        LoginComponent,
+        UserComponent,
+        ActivateComponent,
+        UserListComponent
+      ],
       imports: [
-        AppModule,
-        RouterTestingModule.withRoutes(routes)
-      ]
+        RouterTestingModule.withRoutes(routes),
+        HttpClientTestingModule,
+        SharedModule,
+        ReactiveFormsModule,
+      ],
     }).compileComponents();
   });
 
